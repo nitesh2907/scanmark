@@ -241,7 +241,7 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
 .art-file .x{margin-left:auto;border:0;background:none;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:6px}
 .art-file .x:hover{background:var(--chip);color:var(--ink)}
 .art-linkhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.art-linkhead .mods{font:12px var(--f-mono);color:var(--muted);white-space:nowrap;flex:none}
+.art-linkhead .mods{font:12px var(--f-mono);color:var(--muted)}
 .art-linkhead .mods.long{color:var(--warn);border:1.5px solid currentColor;border-radius:999px;padding:1px 8px}
 .art-in{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:14px var(--f-mono)}
 .art-sl{display:flex;flex-direction:column;gap:8px}
@@ -463,16 +463,16 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
   <section class="hero art-hero" data-view="art" hidden>
     <p class="eyebrow">Art QR</p>
     <h1>Who said QR codes<br><span>have to be boring?</span></h1>
-    <p class="lede">Pick a link, Wi‑Fi, contact and more, drop in any picture and turn your QR code into art. Yes, even your cat. It still scans.</p>
+    <p class="lede">Paste your link, drop in any picture and turn your QR code into art. Yes, even your cat. It still scans.</p>
   </section>
 
   <div class="grid" data-view="art" hidden>
     <div class="steps">
       <section class="step" aria-labelledby="ah1">
-        <h2 id="ah1"><span class="num">1</span>Choose what the code opens</h2>
-        <div class="types" id="artTypes" role="group" aria-label="QR code type"></div>
-        <div class="fields" id="artFields"></div>
-        <div class="art-linkhead" style="margin-top:14px"><span class="art-tip" id="artLenTip">Shorter content makes bigger dots and a cleaner picture.</span><span class="mods" id="artMods">25×25</span></div>
+        <h2 id="ah1"><span class="num">1</span>Paste your link</h2>
+        <div class="art-linkhead"><label class="f" for="artText" style="flex-direction:row">Link or text</label><span class="mods" id="artMods">25×25</span></div>
+        <input class="art-in" id="artText" type="text" value="https://scanmark.app" spellcheck="false" autocomplete="off" style="margin-top:8px">
+        <p class="art-tip" id="artLenTip" style="margin-top:8px">Shorter links make bigger dots and a cleaner picture.</p>
       </section>
 
       <section class="step" aria-labelledby="ah2">
@@ -1044,7 +1044,7 @@ const SL=[
   {k:'bright',l:'Brightness',min:-50,max:50,step:1,v:0,fmt:v=>(v>0?'+':'')+v},
   {k:'blend',l:'Code tint',min:0,max:100,step:1,v:20,fmt:v=>v+'%'},
 ];
-const A={type:'url',text:'',img:null,file:null,panX:0,panY:0,frame:'card',color:'color',scale:4};
+const A={text:'',img:null,file:null,panX:0,panY:0,frame:'card',color:'color',scale:4};
 SL.forEach(s=>A[s.k]=s.v);
 let qr=null, N=21, isFn=null, procKey='', procC=null;
 
@@ -1057,25 +1057,9 @@ $('artSliders').addEventListener('click',e=>{const k=e.target.dataset.reset;if(!
 function seg(id,key,after){const box=$(id);box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));A[key]=key==='scale'?+b.dataset.v:b.dataset.v;after?after():draw();});}
 seg('artFrame','frame');seg('artColor','color');seg('artScale','scale',pxLabel);
 
-// Step 1: what the code opens (same types as the Create page, own values)
-const AV={}; for(const [k,t] of Object.entries(TYPES)){AV[k]={};t.fields.forEach(f=>AV[k][f.k]=f.v);} AV.url.url='https://scanmark.app';
-function artTypes(){ $('artTypes').innerHTML=Object.entries(TYPES).map(([k,t])=>`<button class="type" type="button" data-type="${k}" aria-pressed="${k===A.type}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${t.label}</button>`).join(''); }
-function artFields(){ const t=TYPES[A.type],v=AV[A.type];
-  $('artFields').innerHTML=t.fields.map(f=>{const id=`af-${A.type}-${f.k}`,cls=f.full||f.t==='textarea'?'f full':'f';
-    if(f.t==='textarea')return `<label class="${cls}">${f.l}<textarea id="${id}" data-k="${f.k}"></textarea></label>`;
-    if(f.t==='select')return `<label class="${cls}">${f.l}<select id="${id}" data-k="${f.k}">${f.o.map(([a,b])=>`<option value="${a}">${b}</option>`).join('')}</select></label>`;
-    if(f.t==='check')return `<label class="f check"><input type="checkbox" id="${id}" data-k="${f.k}">${f.l}</label>`;
-    return `<label class="${cls}">${f.l}<input type="${f.t}" id="${id}" data-k="${f.k}"></label>`;}).join('');
-  $('artFields').querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox')el.checked=!!v[el.dataset.k];else el.value=v[el.dataset.k];}); }
-artTypes(); artFields();
-$('artTypes').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;A.type=b.dataset.type;artTypes();artFields();build();draw();});
-let tT=null;
-$('artFields').addEventListener('input',e=>{const el=e.target;if(!el.dataset.k)return;AV[A.type][el.dataset.k]=el.type==='checkbox'?el.checked:el.value;clearTimeout(tT);tT=setTimeout(()=>{build();draw();},150);});
-$('artFields').addEventListener('change',e=>{if(e.target.tagName==='SELECT'||e.target.type==='checkbox'){build();draw();}});
-
 // QR matrix
 function build(){
-  try{ A.text=TYPES[A.type].build(AV[A.type])||' '; }catch(e){ A.text=' '; }
+  A.text=$('artText').value||' ';
   if(typeof qrcode==='undefined'){return false;}
   qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];
   try{ qr=qrcode(0,'H'); qr.addData(A.text); qr.make(); }
@@ -1088,8 +1072,8 @@ function build(){
   }
   const P=ALIGN[v-1]||[];
   for(const r of P)for(const c of P){ if((r===6&&c===6)||(r===6&&c===P[P.length-1])||(r===P[P.length-1]&&c===6)) continue; for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)set(r+i,c+j); }
-  const long=N>=41; const m=$('artMods'); m.textContent=N+'×'+N+(long?(A.type==='url'?' · shorten the link':' · lots of data'):''); m.className='mods'+(long?' long':'');
-  $('artLenTip').textContent=long?'This is a lot of content, so the dots get small. Shorten it (or use a link shortener) for a cleaner picture.':'Shorter content makes bigger dots and a cleaner picture.';
+  const long=N>=37; const m=$('artMods'); m.textContent=N+'×'+N+(long?' · shorten the link':''); m.className='mods'+(long?' long':'');
+  $('artLenTip').textContent=long?'This link is long, so the dots get small. A shorter link (or a link shortener) gives a cleaner picture.':'Shorter links make bigger dots and a cleaner picture.';
   pxLabel(); return true;
 }
 
@@ -1157,7 +1141,7 @@ function check(){
     const d=bx.getImageData(0,0,bg.width,bg.height);const res=jsQR(d.data,bg.width,bg.height,{inversionAttempts:'dontInvert'});
     const ok=res&&res.data===A.text;
     el.className='art-check '+(ok?'ok':'bad');
-    el.innerHTML=ok?'<span class="ic">✓</span><div><b>QR code found</b><small>'+(({url:'Opens your link',text:'Shows your text',email:'Writes your email',phone:'Calls your number',sms:'Writes your SMS',wifi:'Joins your Wi‑Fi',vcard:'Saves your contact',whatsapp:'Opens your WhatsApp chat',geo:'Opens your location'})[A.type]||'Works')+'</small></div>'
+    el.innerHTML=ok?'<span class="ic">✓</span><div><b>QR code found</b><small>Opens your link</small></div>'
                    :'<span class="ic">!</span><div><b>Hard to scan</b><small>Raise Dot size or Contrast, or lower Zoom</small></div>';
   },350);
 }
@@ -1194,6 +1178,7 @@ stage.addEventListener('pointermove',e=>{if(!drag)return;const src=A.img||SAMPLE
 const end=()=>{drag=null;stage.classList.remove('drag');};stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
 
 // link input
+let tT=null;$('artText').addEventListener('input',()=>{clearTimeout(tT);tT=setTimeout(()=>{build();draw();},150);});
 
 // download
 $('artDl').onclick=()=>{
