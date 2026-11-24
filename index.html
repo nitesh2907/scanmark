@@ -227,6 +227,49 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.card,.btn,.type,.opt{transition:none}.card:hover{transform:none}}
 @media (max-width:520px){.step,.preview{padding:20px;border-radius:20px}.hero{padding-block:36px 28px}}
 .brand .logo{width:32px;height:32px;display:block;flex:none}
+/* ── Art QR: photo-halftone QR codes (dots over a picture, solid corner eyes) */
+.art-hero h1 span{font-style:italic;font-weight:600}
+.art-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:150px;padding:20px;border:1.5px dashed var(--line);border-radius:12px;background:var(--chip);text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.art-drop:hover,.art-drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.art-drop .up{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--panel-solid);box-shadow:var(--shadow)}
+.art-drop .up svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.art-drop b{font-weight:600}.art-drop small{color:var(--muted);font-size:13px}
+.art-file{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--chip)}
+.art-file img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none}
+.art-file .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.art-file .sz{font:12px var(--f-mono);color:var(--muted)}
+.art-file .x{margin-left:auto;border:0;background:none;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:6px}
+.art-file .x:hover{background:var(--chip);color:var(--ink)}
+.art-linkhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.art-linkhead .mods{font:12px var(--f-mono);color:var(--muted);white-space:nowrap;flex:none}
+.art-linkhead .mods.long{color:var(--warn);border:1.5px solid currentColor;border-radius:999px;padding:1px 8px}
+.art-in{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:14px var(--f-mono)}
+.art-sl{display:flex;flex-direction:column;gap:8px}
+.art-slider{position:relative;display:flex;align-items:center;gap:10px;padding:0 6px 0 14px;height:44px;border-radius:10px;background:var(--chip);overflow:hidden}
+.art-slider .fill{display:none}
+.art-slider label{position:relative;font-weight:500;min-width:84px}
+.art-slider input[type=range]{position:relative;flex:1;width:auto;margin:0}
+.art-slider output{position:relative;font:12px var(--f-mono);color:var(--muted);min-width:46px;text-align:right}
+.art-slider button{position:relative;border:0;background:none;color:var(--muted);cursor:pointer;width:28px;height:28px;border-radius:6px;font-size:15px}
+.art-slider button:hover{background:var(--panel-solid);color:var(--ink)}
+.art-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:11px;background:var(--chip)}
+.art-seg button{border:0;background:none;padding:9px 6px;border-radius:8px;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+.art-seg button[aria-pressed="true"]{background:var(--panel-solid);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.art-side{position:sticky;top:76px;display:flex;flex-direction:column;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.art-stage{position:relative;aspect-ratio:1;border-radius:12px;display:grid;place-items:center;padding:14px;background:repeating-conic-gradient(var(--chip) 0 25%,transparent 0 50%) 0 0/18px 18px;cursor:grab;touch-action:none;user-select:none}
+.art-stage.drag{cursor:grabbing}
+.art-stage canvas{max-width:100%;max-height:100%;filter:drop-shadow(0 10px 24px rgba(0,0,0,.18))}
+.art-check{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--chip);font-size:13px}
+.art-check .ic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:none;background:var(--muted);color:#fff;font-size:14px}
+.art-check.ok .ic{background:var(--ink);color:var(--bg)}
+.art-check.bad .ic{background:var(--warn)}
+.art-check b{display:block;font-weight:600}.art-check small{font:12px var(--f-mono);color:var(--muted)}
+.art-dlrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.art-dlrow .px{font:12px var(--f-mono);color:var(--muted)}
+#artDl{font:600 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;transition:background .2s,border-color .2s}
+#artDl.done{background:#1fa84a;border-color:#1fa84a}
+.art-tip{margin:0;color:var(--muted);font-size:13px}
+@media (max-width:900px){.art-side{position:static}}
 </style>
 
 </head>
@@ -342,6 +385,9 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
         </div>
 
         <div data-panel="shape" hidden>
+          <p class="label">QR shape</p>
+          <div class="opts" id="qshapeOpts"></div>
+          <p class="hint" id="qshapeHint" hidden style="margin:-8px 0 16px">The real code sits in the middle; the dots around it are decoration that fills the shape. Test it with your phone before printing.</p>
           <p class="label">Body pattern</p>
           <div class="opts" id="dotOpts"></div>
           <p class="label">Corner frame</p>
@@ -409,10 +455,78 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
           <button class="linkbtn" id="saveNewBtn" type="button" hidden style="align-self:flex-start;padding:0;color:var(--accent)">Save as a new QR code instead</button>
           <p class="saved-state" id="savedState">Save this code to find it later in My QR codes.</p>
         </div>
-        <p class="hint">Test the code with your phone camera before printing. If a download doesn't start, right-click the code and choose “Save image as”. SVG files are saved without the frame.</p>
+        <p class="hint">Test the code with your phone camera before printing. If a download doesn't start, right-click the code and choose “Save image as”. SVG files are saved as a plain square code, without the frame or QR shape.</p>
       </div>
     </aside>
   </div>
+  <!-- ART QR -->
+  <section class="hero art-hero" data-view="art" hidden>
+    <p class="eyebrow">Art QR</p>
+    <h1>Who said QR codes<br><span>have to be boring?</span></h1>
+    <p class="lede">Pick a link, Wi‑Fi, contact and more, drop in any picture and turn your QR code into art. Yes, even your cat. It still scans.</p>
+  </section>
+
+  <div class="grid" data-view="art" hidden>
+    <div class="steps">
+      <section class="step" aria-labelledby="ah1">
+        <h2 id="ah1"><span class="num">1</span>Choose what the code opens</h2>
+        <div class="types" id="artTypes" role="group" aria-label="QR code type"></div>
+        <div class="fields" id="artFields"></div>
+        <div class="art-linkhead" style="margin-top:14px"><span class="art-tip" id="artLenTip">Shorter content makes bigger dots and a cleaner picture.</span><span class="mods" id="artMods">25×25</span></div>
+      </section>
+
+      <section class="step" aria-labelledby="ah2">
+        <h2 id="ah2"><span class="num">2</span>Drop in any picture</h2>
+        <label class="art-drop" id="artDrop" tabindex="0">
+          <span class="up"><svg viewBox="0 0 24 24"><path d="M12 19V6M6 11l6-6 6 6"/></svg></span>
+          <b>Drag an image here</b>
+          <small>or click to browse · PNG, JPG, WebP, SVG</small>
+          <input type="file" id="artFile" accept="image/*" hidden>
+        </label>
+        <div class="art-file" id="artFileRow" hidden>
+          <img id="artThumb" alt="">
+          <div style="min-width:0"><div class="nm" id="artName"></div><div class="sz" id="artSize"></div></div>
+          <button class="x" id="artRemove" type="button" aria-label="Remove picture">×</button>
+        </div>
+      </section>
+
+      <section class="step" aria-labelledby="ah3">
+        <h2 id="ah3"><span class="num">3</span>Play with the sliders till it feels right</h2>
+        <div class="art-sl" id="artSliders"></div>
+        <p class="art-tip" style="margin-top:10px">Tip: drag the picture in the preview to move it around.</p>
+        <h3 style="margin:18px 0 8px;font:600 14px var(--f-body)">Clean card or stamp?</h3>
+        <div class="art-seg" id="artFrame" role="group" aria-label="Frame">
+          <button type="button" data-v="card" aria-pressed="true">Card</button>
+          <button type="button" data-v="stamp" aria-pressed="false">Stamp</button>
+          <button type="button" data-v="none" aria-pressed="false">None</button>
+        </div>
+        <h3 style="margin:18px 0 8px;font:600 14px var(--f-body)">Colour</h3>
+        <div class="art-seg" id="artColor" role="group" aria-label="Colour">
+          <button type="button" data-v="color" aria-pressed="true">Colour</button>
+          <button type="button" data-v="mono" aria-pressed="false">B&amp;W</button>
+          <button type="button" data-v="duo" aria-pressed="false">Duotone</button>
+        </div>
+      </section>
+    </div>
+
+    <aside>
+      <div class="art-side">
+        <h2 style="display:flex;align-items:center;gap:10px;margin:0;font-family:var(--f-display);font-weight:600;font-size:19px"><span class="num">4</span>Hit download</h2>
+        <div class="art-stage" id="artStage" title="Drag to move the picture"><canvas id="artCanvas" width="600" height="600" aria-label="Art QR code preview"></canvas></div>
+        <div class="art-check" id="artCheck" aria-live="polite"><span class="ic">…</span><div><b>Checking…</b><small>Reading the code</small></div></div>
+        <div class="art-seg" id="artScale" role="group" aria-label="Download size">
+          <button type="button" data-v="1" aria-pressed="false">1×</button>
+          <button type="button" data-v="2" aria-pressed="false">2×</button>
+          <button type="button" data-v="4" aria-pressed="true">4×</button>
+          <button type="button" data-v="6" aria-pressed="false">6×</button>
+          <button type="button" data-v="8" aria-pressed="false">8×</button>
+        </div>
+        <div class="art-dlrow"><span class="px" id="artPx">3,240 × 3,240 px</span><button class="btn primary" id="artDl" type="button">↓ Download PNG</button></div>
+        <p class="art-tip">Always test with your phone camera before printing. If it won't scan, raise <b>Dot size</b> or <b>Contrast</b>.</p>
+      </div>
+    </aside>
+  </div>
+
   <p class="foot" id="foot"></p>
 </div>
 <div class="toast" id="toast" role="status"></div>
@@ -449,7 +563,7 @@ const TYPES = {
 };
 const vals = {}; for (const [k,t] of Object.entries(TYPES)) { vals[k]={}; t.fields.forEach(f=>vals[k][f.k]=f.v); }
 
-const S = { type:'url', frame:'none', dots:'square', corner:'square', cdot:'square', ec:'Q', logo:null, frameImg:null };
+const S = { type:'url', qshape:'square', frame:'none', dots:'square', corner:'square', cdot:'square', ec:'Q', logo:null, frameImg:null };
 let lastCanvas = null, lastData = '';
 
 // Step 1: type picker + fields
@@ -471,6 +585,64 @@ $('types').addEventListener('click',e=>{const b=e.target.closest('[data-type]');
 $('fields').addEventListener('input',e=>{const el=e.target;if(!el.dataset.k)return;vals[S.type][el.dataset.k]=el.type==='checkbox'?el.checked:el.value;schedule();});
 
 // Step 2: option groups with tiny drawn swatches
+// ── QR shapes: unit-box paths (0..1) and where the real code sits
+const QSHAPES={
+  square:{cx:.5,cy:.5},
+  circle:{cx:.5,cy:.5,path:p=>{p.arc(.5,.5,.5,0,Math.PI*2);}},
+  heart:{cx:.5,cy:.4,path:p=>{p.moveTo(.5,.97);p.bezierCurveTo(.2,.76,0,.56,0,.31);p.bezierCurveTo(0,.12,.14,.02,.29,.02);p.bezierCurveTo(.39,.02,.46,.07,.5,.16);p.bezierCurveTo(.54,.07,.61,.02,.71,.02);p.bezierCurveTo(.86,.02,1,.12,1,.31);p.bezierCurveTo(1,.56,.8,.76,.5,.97);p.closePath();}},
+  star:{cx:.5,cy:.54,path:p=>{for(let i=0;i<10;i++){const r=i%2?.29:.52,a=-Math.PI/2+i*Math.PI/5,X=.5+r*Math.cos(a),Y=.54+r*Math.sin(a);i?p.lineTo(X,Y):p.moveTo(X,Y);}p.closePath();}},
+  hexagon:{cx:.5,cy:.5,path:p=>{for(let i=0;i<6;i++){const a=-Math.PI/2+i*Math.PI/3,X=.5+.5*Math.cos(a)*.98,Y=.5+.5*Math.sin(a);i?p.lineTo(X,Y):p.moveTo(X,Y);}p.closePath();}},
+  shield:{cx:.5,cy:.44,path:p=>{p.moveTo(.5,.02);p.bezierCurveTo(.66,.1,.8,.13,.94,.13);p.lineTo(.94,.46);p.bezierCurveTo(.94,.72,.76,.88,.5,.98);p.bezierCurveTo(.24,.88,.06,.72,.06,.46);p.lineTo(.06,.13);p.bezierCurveTo(.2,.13,.34,.1,.5,.02);p.closePath();}},
+  cloud:{cx:.5,cy:.56,path:p=>{const c=(X,Y,R)=>{p.moveTo(X+R,Y);p.arc(X,Y,R,0,Math.PI*2);};c(.27,.58,.24);c(.5,.42,.3);c(.75,.56,.24);p.moveTo(.2,.56);p.roundRect(.05,.52,.9,.32,.16);}},
+  house:{cx:.5,cy:.63,path:p=>{p.moveTo(.5,.04);p.lineTo(.97,.45);p.lineTo(.86,.45);p.lineTo(.86,.97);p.lineTo(.14,.97);p.lineTo(.14,.45);p.lineTo(.03,.45);p.closePath();}}
+};
+const QSHAPE_LIST=[['square','Square'],['circle','Circle'],['heart','Heart'],['star','Star'],['hexagon','Hexagon'],['shield','Shield'],['cloud','Cloud'],['house','House']];
+function shapePath(name,scale,ox=0,oy=0){const p=new Path2D(),sh=QSHAPES[name];const m=new DOMMatrix([scale,0,0,scale,ox,oy]);const u=new Path2D();sh.path(u);p.addPath(u,m);return p;}
+const _fitCache={};
+function shapeFit(name){ // biggest square (as a fraction of the box) that fits inside the shape around its centre
+  if(_fitCache[name]) return _fitCache[name];
+  const sh=QSHAPES[name], N=1000, c=document.createElement('canvas').getContext('2d'), p=shapePath(name,N);
+  const fits=f=>{const h=f/2;for(let i=0;i<=40;i++){const t=-h+f*i/40;for(const [X,Y] of [[sh.cx+t,sh.cy-h],[sh.cx+t,sh.cy+h],[sh.cx-h,sh.cy+t],[sh.cx+h,sh.cy+t]]) if(!c.isPointInPath(p,X*N,Y*N)) return false;}return true;};
+  let lo=0,hi=1; for(let k=0;k<22;k++){const m=(lo+hi)/2; fits(m)?lo=m:hi=m;}
+  return _fitCache[name]=lo;
+}
+function seeded(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return ()=>{h^=h<<13;h^=h>>>17;h^=h<<5;return ((h>>>0)%100000)/100000;};}
+function moduleDraw(x,style,X,Y,m){
+  const g=m*.06, s=m-g*2;
+  if(style==='dots'){x.moveTo(X+m/2+s/2,Y+m/2);x.arc(X+m/2,Y+m/2,s/2,0,Math.PI*2);}
+  else if(style==='square'){x.rect(X,Y,m+.5,m+.5);}
+  else if(style==='classy'||style==='classy-rounded'){x.roundRect(X+g,Y+g,s,s,[s*.5,s*.1,s*.5,s*.1]);}
+  else x.roundRect(X+g,Y+g,s,s,style==='extra-rounded'?s*.5:s*.3);
+}
+// Real QR in the middle + decorative modules on the same grid, clipped to the shape
+async function shapedQR(size){
+  const name=S.qshape, sh=QSHAPES[name];
+  const margin=Math.round(+$('margin').value*size/1000), box=size-margin*2;
+  const probe=new QRCodeStyling({...qrOptions(100,'canvas'),margin:0}); await probe.getRawData('png');
+  const count=probe._qr?.getModuleCount?.()||33;
+  const GAP=1; // modules of clear space kept around the real code
+  let q=Math.floor(shapeFit(name)*box*0.84); const m=Math.max(1,Math.floor(q/(count+GAP*2))); q=m*count;
+  const qx=Math.round(margin+sh.cx*box-q/2), qy=Math.round(margin+sh.cy*box-q/2);
+  const blob=await new QRCodeStyling({...qrOptions(q,'canvas'),margin:0}).getRawData('png');
+  const url=URL.createObjectURL(blob); const img=await loadImg(url); URL.revokeObjectURL(url);
+  const c=document.createElement('canvas'); c.width=c.height=size; const x=c.getContext('2d');
+  const path=shapePath(name,box,margin,margin);
+  x.fillStyle=$('bgc').value; x.fill(path);
+  const fg=$('fg').value; let paint=fg;
+  if($('grad').checked){const g=$('gradType').value==='radial'?x.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2):x.createLinearGradient(0,0,size,size);g.addColorStop(0,fg);g.addColorStop(1,$('fg2').value);paint=g;}
+  const rnd=seeded((lastData||' ')+name), deco=new Path2D(), hit=x;
+  const i0=-Math.ceil(qx/m), i1=Math.ceil((size-qx)/m), j0=-Math.ceil(qy/m), j1=Math.ceil((size-qy)/m);
+  for(let j=j0;j<j1;j++) for(let i=i0;i<i1;i++){
+    const r=rnd(); if(i>=-GAP&&i<count+GAP&&j>=-GAP&&j<count+GAP) continue;
+    const X=qx+i*m, Y=qy+j*m; if(!hit.isPointInPath(path,X+m/2,Y+m/2)) continue;
+    if(r<0.5) moduleDraw(deco,S.dots,X,Y,m);
+  }
+  x.save(); x.clip(path); x.fillStyle=paint; x.fill(deco); x.restore();
+  x.fillStyle=$('bgc').value; x.fillRect(qx-m*GAP,qy-m*GAP,q+m*GAP*2,q+m*GAP*2);
+  x.drawImage(img,qx,qy);
+  return c;
+}
+
 function swatch(kind,val){
   const c=document.createElement('canvas');c.width=c.height=80;const x=c.getContext('2d');
   const ink=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#151a22';
@@ -483,6 +655,15 @@ function swatch(kind,val){
     else if(val==='extra-rounded'){rr(X,Y,s,s,9);x.fill();}
     else if(val==='classy'){x.beginPath();x.moveTo(X,Y+s);x.lineTo(X,Y+6);x.quadraticCurveTo(X,Y,X+6,Y);x.lineTo(X+s,Y);x.lineTo(X+s,Y+s);x.closePath();x.fill();}
     else {rr(X,Y,s,s,[9,2,9,2]);x.fill();}});}
+  else if(kind==='qshape'){
+    const p=val==='square'?(()=>{const q=new Path2D();q.rect(8,8,64,64);return q;})():shapePath(val,72,4,4);
+    x.save();x.clip(p);const rnd=seeded(val);for(let j=0;j<18;j++)for(let i=0;i<18;i++){if(rnd()<.5)x.fillRect(4+i*4,4+j*4,3,3);}x.restore();
+    x.lineWidth=2.5;x.stroke(p);
+    const sh=QSHAPES[val],cx=4+sh.cx*72,cy=4+sh.cy*72,h=val==='square'?20:Math.max(9,shapeFit(val)*72*.4);
+    x.fillStyle=pan;x.fillRect(cx-h-2,cy-h-2,h*2+4,h*2+4);x.fillStyle=ink;
+    const f=h*.62;[[cx-h,cy-h],[cx+h-f,cy-h],[cx-h,cy+h-f]].forEach(([X,Y])=>{x.lineWidth=Math.max(1.5,f*.18);x.strokeRect(X+x.lineWidth/2,Y+x.lineWidth/2,f-x.lineWidth,f-x.lineWidth);x.fillRect(X+f*.34,Y+f*.34,f*.32,f*.32);});
+    x.fillRect(cx+h*.15,cy+h*.15,h*.3,h*.3);x.fillRect(cx+h*.6,cy+h*.55,h*.3,h*.3);
+  }
   else if(kind==='corner'){x.lineWidth=11;const r=val==='square'?0:val==='dot'?30:16;rr(13,13,54,54,r);x.stroke();x.beginPath();if(val==='dot'){x.arc(40,40,11,0,7);}else{x.roundRect(30,30,20,20,val==='square'?0:5);}x.fill();}
   else if(kind==='cdot'){x.lineWidth=8;x.globalAlpha=.25;rr(12,12,56,56,10);x.stroke();x.globalAlpha=1;x.beginPath();if(val==='dot'){x.arc(40,40,14,0,7);}else{x.rect(26,26,28,28);}x.fill();}
   else if(kind==='frame'){x.lineWidth=4;
@@ -499,11 +680,12 @@ function swatch(kind,val){
 function opts(el,kind,key,list){
   const box=$(el);box.innerHTML='';
   list.forEach(([v,l])=>{const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed',S[key]===v);b.dataset.v=v;
-    if(kind)b.appendChild(swatch(kind,v));b.append(l);b.onclick=()=>{S[key]=v;box.querySelectorAll('.opt').forEach(o=>o.setAttribute('aria-pressed',o.dataset.v===v));if(key==='ec')ecHint();if(key==='frame')frameUI();schedule();};box.appendChild(b);});
+    if(kind)b.appendChild(swatch(kind,v));b.append(l);b.onclick=()=>{S[key]=v;box.querySelectorAll('.opt').forEach(o=>o.setAttribute('aria-pressed',o.dataset.v===v));if(key==='ec')ecHint();if(key==='frame')frameUI();if(key==='qshape')$('qshapeHint').hidden=v==='square';schedule();};box.appendChild(b);});
 }
 function drawOptions(){
   opts('frameOpts','frame','frame',[['none','No frame'],['bottom','Label below'],['top','Label above'],['ticket','Badge'],['corners','Viewfinder'],['custom','Custom'],['image','Your image']]);
   frameUI();
+  opts('qshapeOpts','qshape','qshape',QSHAPE_LIST); $('qshapeHint').hidden=S.qshape==='square';
   opts('dotOpts','dots','dots',[['square','Square'],['dots','Dots'],['rounded','Rounded'],['extra-rounded','Soft'],['classy','Classy'],['classy-rounded','Leaf']]);
   opts('cornerOpts','corner','corner',[['square','Square'],['extra-rounded','Rounded'],['dot','Circle']]);
   opts('cdotOpts','cdot','cdot',[['square','Square'],['dot','Circle']]);
@@ -642,8 +824,10 @@ function qrOptions(size,type){
 const loadImg = src => new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});
 
 async function compose(size){
-  const blob = await new QRCodeStyling(qrOptions(size,'canvas')).getRawData('png');
-  const url = URL.createObjectURL(blob); const img = await loadImg(url); URL.revokeObjectURL(url);
+  let img;
+  if(S.qshape&&S.qshape!=='square'&&QSHAPES[S.qshape]) img = await shapedQR(size);
+  else { const blob = await new QRCodeStyling(qrOptions(size,'canvas')).getRawData('png');
+    const url = URL.createObjectURL(blob); img = await loadImg(url); URL.revokeObjectURL(url); }
   const fc=$('frameColor').value, tc=$('frameTextColor').value, bg=$('bgc').value, text=$('frameText').value.trim();
   const u=size/1000, pad=Math.round(48*u), band=Math.round(170*u), r=Math.round(36*u);
   const c=document.createElement('canvas'), x=c.getContext('2d');
@@ -745,12 +929,12 @@ const errText = e => ERR[e?.code] || 'Something went wrong. Please try again.';
 // ── design state ↔ saved project
 const COLOR_PAIRS={frameColor:'frameColorHex',frameTextColor:'frameTextColorHex',fg:'fgHex',bgc:'bgHex',cc:'ccHex',fg2:'fg2Hex'};
 function getDesign(){
-  const d={frame:S.frame,dots:S.dots,corner:S.corner,cdot:S.cdot,ec:S.ec,logo:S.logo,
+  const d={qshape:S.qshape,frame:S.frame,dots:S.dots,corner:S.corner,cdot:S.cdot,ec:S.ec,logo:S.logo,
     frameText:$('frameText').value,grad:$('grad').checked,gradType:$('gradType').value,margin:$('margin').value,size:$('size').value,logoSize:$('logoSize').value,logoClear:$('logoClear').checked};
   for(const k in COLOR_PAIRS) d[k]=$(k).value; Object.assign(d,frameCfg()); d.frameImg=S.frame==='image'?S.frameImg:null; return d;
 }
 function applyDesign(d){
-  ['frame','dots','corner','cdot','ec'].forEach(k=>{if(d[k])S[k]=d[k];}); S.logo=d.logo||null;
+  ['frame','dots','corner','cdot','ec'].forEach(k=>{if(d[k])S[k]=d[k];}); S.qshape=QSHAPES[d.qshape]?d.qshape:'square'; S.logo=d.logo||null;
   for(const k in COLOR_PAIRS) if(d[k]){$(k).value=d[k];$(COLOR_PAIRS[k]).value=d[k];}
   ['frameText','gradType','margin','size','logoSize'].forEach(k=>{if(d[k]!=null)$(k).value=d[k];});
   $('grad').checked=!!d.grad; $('gradBox').hidden=!d.grad; $('logoClear').checked=d.logoClear!==false;
@@ -789,11 +973,11 @@ $('projName').addEventListener('keydown',e=>{if(e.key==='Enter')saveProject();})
 function renderNav(view){
   try{renderMyFrames();}catch(e){}
   const a=(h,t)=>`<a href="#${h}" class="${view===h?'on':''}">${t}</a>`;
-  $('nav').innerHTML = a('create','Create')+a('projects','My QR codes');
+  $('nav').innerHTML = a('create','Create')+a('art','Art QR')+a('projects','My QR codes');
 }
 function go(view){ if(location.hash==='#'+view) route(); else location.hash=view; }
 function route(){
-  let v=(location.hash||'#create').slice(1); if(!['create','projects'].includes(v)) v='create';
+  let v=(location.hash||'#create').slice(1); if(!['create','art','projects'].includes(v)) v='create';
   if(location.hash && location.hash.slice(1)!==v && !['start'].includes(location.hash.slice(1))) history.replaceState(null,'','#'+v);
   document.querySelectorAll('[data-view]').forEach(el=>el.hidden=el.dataset.view!==v);
   renderNav(v);
@@ -841,6 +1025,192 @@ renderTypes(); renderFields(); drawOptions(); ecHint();
   $('foot').textContent = 'Your saved QR codes and frames are kept in this browser.';
   route();
   (document.fonts?document.fonts.ready:Promise.resolve()).then(render);
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script>
+/* ── Art QR: the picture fills the code, each data module becomes a centred dot,
+   finder / timing / alignment / format modules stay solid so phones can still read it. */
+(()=>{
+const $ = id => document.getElementById(id);
+if(!$('artCanvas')) return;
+const ALIGN=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]];
+const SL=[
+  {k:'zoom',l:'Zoom',min:1,max:3,step:.01,v:1,fmt:v=>v.toFixed(2)+'×'},
+  {k:'dot',l:'Dot size',min:20,max:75,step:1,v:42,fmt:v=>v+'%'},
+  {k:'contrast',l:'Contrast',min:50,max:220,step:1,v:125,fmt:v=>v+'%'},
+  {k:'bright',l:'Brightness',min:-50,max:50,step:1,v:0,fmt:v=>(v>0?'+':'')+v},
+  {k:'blend',l:'Code tint',min:0,max:100,step:1,v:20,fmt:v=>v+'%'},
+];
+const A={type:'url',text:'',img:null,file:null,panX:0,panY:0,frame:'card',color:'color',scale:4};
+SL.forEach(s=>A[s.k]=s.v);
+let qr=null, N=21, isFn=null, procKey='', procC=null;
+
+// sliders
+$('artSliders').innerHTML=SL.map(s=>`<div class="art-slider"><span class="fill" data-fill="${s.k}"></span><label for="as-${s.k}">${s.l}</label><input type="range" id="as-${s.k}" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.v}"><output id="ao-${s.k}"></output><button type="button" data-reset="${s.k}" aria-label="Reset ${s.l}" title="Reset">↺</button></div>`).join('');
+function syncSlider(s){const el=$('as-'+s.k);el.value=A[s.k];$('ao-'+s.k).textContent=s.fmt(+A[s.k]);document.querySelector(`[data-fill="${s.k}"]`).style.width=((A[s.k]-s.min)/(s.max-s.min)*100)+'%';}
+SL.forEach(s=>{syncSlider(s);$('as-'+s.k).addEventListener('input',e=>{A[s.k]=+e.target.value;syncSlider(s);draw();});});
+$('artSliders').addEventListener('click',e=>{const k=e.target.dataset.reset;if(!k)return;const s=SL.find(x=>x.k===k);A[k]=s.v;if(k==='zoom'){A.panX=A.panY=0;}syncSlider(s);draw();});
+
+function seg(id,key,after){const box=$(id);box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));A[key]=key==='scale'?+b.dataset.v:b.dataset.v;after?after():draw();});}
+seg('artFrame','frame');seg('artColor','color');seg('artScale','scale',pxLabel);
+
+// Step 1: what the code opens (same types as the Create page, own values)
+const AV={}; for(const [k,t] of Object.entries(TYPES)){AV[k]={};t.fields.forEach(f=>AV[k][f.k]=f.v);} AV.url.url='https://scanmark.app';
+function artTypes(){ $('artTypes').innerHTML=Object.entries(TYPES).map(([k,t])=>`<button class="type" type="button" data-type="${k}" aria-pressed="${k===A.type}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${t.label}</button>`).join(''); }
+function artFields(){ const t=TYPES[A.type],v=AV[A.type];
+  $('artFields').innerHTML=t.fields.map(f=>{const id=`af-${A.type}-${f.k}`,cls=f.full||f.t==='textarea'?'f full':'f';
+    if(f.t==='textarea')return `<label class="${cls}">${f.l}<textarea id="${id}" data-k="${f.k}"></textarea></label>`;
+    if(f.t==='select')return `<label class="${cls}">${f.l}<select id="${id}" data-k="${f.k}">${f.o.map(([a,b])=>`<option value="${a}">${b}</option>`).join('')}</select></label>`;
+    if(f.t==='check')return `<label class="f check"><input type="checkbox" id="${id}" data-k="${f.k}">${f.l}</label>`;
+    return `<label class="${cls}">${f.l}<input type="${f.t}" id="${id}" data-k="${f.k}"></label>`;}).join('');
+  $('artFields').querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox')el.checked=!!v[el.dataset.k];else el.value=v[el.dataset.k];}); }
+artTypes(); artFields();
+$('artTypes').addEventListener('click',e=>{const b=e.target.closest('[data-type]');if(!b)return;A.type=b.dataset.type;artTypes();artFields();build();draw();});
+let tT=null;
+$('artFields').addEventListener('input',e=>{const el=e.target;if(!el.dataset.k)return;AV[A.type][el.dataset.k]=el.type==='checkbox'?el.checked:el.value;clearTimeout(tT);tT=setTimeout(()=>{build();draw();},150);});
+$('artFields').addEventListener('change',e=>{if(e.target.tagName==='SELECT'||e.target.type==='checkbox'){build();draw();}});
+
+// QR matrix
+function build(){
+  try{ A.text=TYPES[A.type].build(AV[A.type])||' '; }catch(e){ A.text=' '; }
+  if(typeof qrcode==='undefined'){return false;}
+  qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];
+  try{ qr=qrcode(0,'H'); qr.addData(A.text); qr.make(); }
+  catch(e){ qr=null; $('artMods').textContent='Too long'; $('artMods').className='mods long'; return false; }
+  N=qr.getModuleCount(); const v=(N-17)/4;
+  isFn=new Uint8Array(N*N); const set=(r,c)=>{if(r>=0&&c>=0&&r<N&&c<N)isFn[r*N+c]=1;};
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    if((r<9&&c<9)||(r<9&&c>=N-8)||(r>=N-8&&c<9)||r===6||c===6) set(r,c);
+    if(v>=7&&((r<6&&c>=N-11&&c<N-8)||(c<6&&r>=N-11&&r<N-8))) set(r,c);
+  }
+  const P=ALIGN[v-1]||[];
+  for(const r of P)for(const c of P){ if((r===6&&c===6)||(r===6&&c===P[P.length-1])||(r===P[P.length-1]&&c===6)) continue; for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)set(r+i,c+j); }
+  const long=N>=41; const m=$('artMods'); m.textContent=N+'×'+N+(long?(A.type==='url'?' · shorten the link':' · lots of data'):''); m.className='mods'+(long?' long':'');
+  $('artLenTip').textContent=long?'This is a lot of content, so the dots get small. Shorten it (or use a link shortener) for a cleaner picture.':'Shorter content makes bigger dots and a cleaner picture.';
+  pxLabel(); return true;
+}
+
+// Default picture when none is chosen: soft colour blobs
+function sample(){const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');const g=x.createLinearGradient(0,0,800,800);g.addColorStop(0,'#3a2a8c');g.addColorStop(1,'#c2366b');x.fillStyle=g;x.fillRect(0,0,800,800);
+  [['#7fb2ff',200,220,330],['#ffb36b',600,560,300],['#9cf0d0',620,180,220],['#ff7ac8',220,620,240]].forEach(([col,cx,cy,r])=>{const rg=x.createRadialGradient(cx,cy,0,cx,cy,r);rg.addColorStop(0,col);rg.addColorStop(1,col+'00');x.fillStyle=rg;x.fillRect(0,0,800,800);});return c;}
+const SAMPLE=sample();
+
+// Picture → cropped, adjusted square (cached)
+function processed(res){
+  const src=A.img||SAMPLE; const key=[res,A.zoom,A.panX.toFixed(3),A.panY.toFixed(3),A.contrast,A.bright,A.color,A.img?A.file?.name:'s'].join('|');
+  if(key===procKey&&procC) return procC;
+  const c=document.createElement('canvas');c.width=c.height=res;const x=c.getContext('2d',{willReadFrequently:true});
+  const iw=src.naturalWidth||src.width, ih=src.naturalHeight||src.height; const k=Math.max(res/iw,res/ih)*A.zoom; const w=iw*k,h=ih*k;
+  x.fillStyle='#fff';x.fillRect(0,0,res,res);
+  x.drawImage(src,(res-w)/2*(1-A.panX),(res-h)/2*(1-A.panY),w,h);
+  const d=x.getImageData(0,0,res,res),p=d.data,cf=A.contrast/100,br=A.bright*2.55;
+  const dark=[22,24,52],light=[246,236,255];
+  for(let i=0;i<p.length;i+=4){
+    let r=(p[i]-128)*cf+128+br,g=(p[i+1]-128)*cf+128+br,b=(p[i+2]-128)*cf+128+br;
+    if(A.color!=='color'){const y=Math.max(0,Math.min(255,.299*r+.587*g+.114*b));
+      if(A.color==='mono'){r=g=b=y;} else {const t=y/255;r=dark[0]+(light[0]-dark[0])*t;g=dark[1]+(light[1]-dark[1])*t;b=dark[2]+(light[2]-dark[2])*t;}}
+    p[i]=r;p[i+1]=g;p[i+2]=b;
+  }
+  x.putImageData(d,0,0); procKey=key; procC=c; return c;
+}
+
+function pad(){return A.frame==='stamp'?5:A.frame==='card'?4:3;}
+function sizeFor(scale){const P=pad();const s=Math.max(2,Math.round(810*scale/(N+2*P)));return s*(N+2*P);}
+function pxLabel(){const t=sizeFor(A.scale);$('artPx').textContent=t.toLocaleString('en-IN')+' × '+t.toLocaleString('en-IN')+' px';}
+
+// Paint the full code at a given canvas size
+function paint(cv,total,res){
+  const P=pad(),M=N+2*P,s=total/M,x=cv.getContext('2d');cv.width=cv.height=Math.round(total);
+  x.clearRect(0,0,total,total);
+  // frame
+  x.fillStyle='#fff';
+  if(A.frame==='card'){const r=s*1.6;x.beginPath();x.roundRect?x.roundRect(0,0,total,total,r):x.rect(0,0,total,total);x.fill();}
+  else if(A.frame==='stamp'){x.fillRect(0,0,total,total);x.globalCompositeOperation='destination-out';
+    const n=Math.max(8,Math.round(M/1.6)),step=total/n,hr=step*.3;
+    for(let i=0;i<=n;i++){for(const [cx,cy] of [[i*step,0],[i*step,total],[0,i*step],[total,i*step]]){x.beginPath();x.arc(cx,cy,hr,0,Math.PI*2);x.fill();}}
+    x.globalCompositeOperation='source-over';x.strokeStyle='#d6d3df';x.lineWidth=Math.max(1,s*.12);const ins=s*1.7;x.strokeRect(ins,ins,total-2*ins,total-2*ins);}
+  else x.fillRect(0,0,total,total);
+  if(!qr) return;
+  const o=P*s,area=N*s;
+  x.imageSmoothingQuality='high';x.drawImage(processed(res),o,o,area,area);
+  const dot=s*A.dot/100,tint=A.blend/100*.75;
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    const on=qr.isDark(r,c),X=o+c*s,Y=o+r*s;
+    if(isFn[r*N+c]){x.fillStyle=on?'#000':'#fff';x.fillRect(X-.25,Y-.25,s+.5,s+.5);continue;}
+    if(tint>0){x.globalAlpha=tint;x.fillStyle=on?'#000':'#fff';x.fillRect(X,Y,s,s);x.globalAlpha=1;}
+    x.fillStyle=on?'#000':'#fff';const d=(s-dot)/2;x.fillRect(X+d,Y+d,dot,dot);
+  }
+  // round the eyes' look slightly cleaner: redraw finders as crisp blocks
+}
+
+// scan check
+let chkT=null;
+function check(){
+  clearTimeout(chkT);chkT=setTimeout(()=>{
+    const el=$('artCheck');
+    if(typeof jsQR==='undefined'||!qr){el.className='art-check';el.innerHTML='<span class="ic">?</span><div><b>Scan check unavailable</b><small>Test it with your phone camera</small></div>';return;}
+    const cv=document.createElement('canvas');paint(cv,720,900);const x=cv.getContext('2d');
+    const bg=document.createElement('canvas');bg.width=bg.height=cv.width+80;const bx=bg.getContext('2d');bx.fillStyle='#fff';bx.fillRect(0,0,bg.width,bg.height);bx.drawImage(cv,40,40);
+    const d=bx.getImageData(0,0,bg.width,bg.height);const res=jsQR(d.data,bg.width,bg.height,{inversionAttempts:'dontInvert'});
+    const ok=res&&res.data===A.text;
+    el.className='art-check '+(ok?'ok':'bad');
+    el.innerHTML=ok?'<span class="ic">✓</span><div><b>QR code found</b><small>'+(({url:'Opens your link',text:'Shows your text',email:'Writes your email',phone:'Calls your number',sms:'Writes your SMS',wifi:'Joins your Wi‑Fi',vcard:'Saves your contact',whatsapp:'Opens your WhatsApp chat',geo:'Opens your location'})[A.type]||'Works')+'</small></div>'
+                   :'<span class="ic">!</span><div><b>Hard to scan</b><small>Raise Dot size or Contrast, or lower Zoom</small></div>';
+  },350);
+}
+
+let raf=0;
+function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{paint($('artCanvas'),720,900);check();});}
+
+// picture input
+function loadFile(f){
+  if(!f||!/^image\//.test(f.type)){toastMsg('Please choose an image file');return;}
+  const url=URL.createObjectURL(f);const im=new Image();
+  im.onload=()=>{A.img=im;A.file=f;A.panX=A.panY=0;$('artThumb').src=url;$('artName').textContent=f.name;
+    $('artSize').textContent=Math.max(1,Math.round(f.size/1024))+' KB · '+im.naturalWidth+'×'+im.naturalHeight;
+    $('artDrop').hidden=true;$('artFileRow').hidden=false;procKey='';draw();};
+  im.onerror=()=>toastMsg('That image could not be opened');im.src=url;
+}
+function toastMsg(m){const t=$('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400);}
+$('artFile').addEventListener('change',e=>loadFile(e.target.files[0]));
+const drop=$('artDrop');
+drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('artFile').click();}});
+['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+document.addEventListener('paste',e=>{if(location.hash!=='#art')return;const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith('image/'));if(it)loadFile(it.getAsFile());});
+$('artRemove').onclick=()=>{A.img=null;A.file=null;$('artFile').value='';$('artDrop').hidden=false;$('artFileRow').hidden=true;procKey='';draw();};
+
+// drag to move picture
+const stage=$('artStage');let drag=null;
+stage.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,px:A.panX,py:A.panY};stage.setPointerCapture(e.pointerId);stage.classList.add('drag');});
+stage.addEventListener('pointermove',e=>{if(!drag)return;const src=A.img||SAMPLE;const iw=src.naturalWidth||src.width,ih=src.naturalHeight||src.height;
+  const areaPx=$('artCanvas').clientWidth*N/(N+2*pad());const k=Math.max(1/iw,1/ih)*A.zoom;const ox=iw*k-1,oy=ih*k-1;
+  if(ox>.001)A.panX=Math.max(-1,Math.min(1,drag.px+2*(e.clientX-drag.x)/areaPx/ox));
+  if(oy>.001)A.panY=Math.max(-1,Math.min(1,drag.py+2*(e.clientY-drag.y)/areaPx/oy));draw();});
+const end=()=>{drag=null;stage.classList.remove('drag');};stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
+
+// link input
+
+// download
+$('artDl').onclick=()=>{
+  if(!qr){toastMsg('Add a link first');return;}
+  const b=$('artDl');b.disabled=true;b.textContent='Rendering…';
+  setTimeout(()=>{
+    const cv=document.createElement('canvas');const t=sizeFor(A.scale);procKey='';paint(cv,t,Math.min(2400,Math.max(900,t)));procKey='';
+    cv.toBlob(blob=>{
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='scanmark-art-qr-'+A.scale+'x.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+      b.disabled=false;b.classList.add('done');b.textContent='✓ Downloaded';setTimeout(()=>{b.classList.remove('done');b.textContent='↓ Download PNG';},2200);
+    },'image/png');
+  },30);
+};
+
+function start(){ if(build()) draw(); else { $('artCheck').innerHTML='<span class="ic">!</span><div><b>QR library did not load</b><small>Check your internet and reload</small></div>'; } }
+if(document.readyState==='complete') start(); else window.addEventListener('load',start);
+window.addEventListener('hashchange',()=>{if(location.hash==='#art')draw();});
 })();
 </script>
 
