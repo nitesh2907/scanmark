@@ -269,6 +269,14 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
 #artDl{font:600 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;transition:background .2s,border-color .2s}
 #artDl.done{background:#1fa84a;border-color:#1fa84a}
 .art-tip{margin:0;color:var(--muted);font-size:13px}
+.art-samphead{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 8px;font:600 14px var(--f-body)}
+.art-samphead small{font:12px var(--f-mono);color:var(--muted);font-weight:400}
+.art-samples{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.art-samples button{display:flex;flex-direction:column;gap:5px;padding:4px;border:2px solid transparent;border-radius:12px;background:var(--chip);cursor:pointer;color:var(--muted);font:500 11px var(--f-mono);letter-spacing:.04em;transition:border-color .15s,transform .15s}
+.art-samples button:hover{transform:translateY(-2px);color:var(--ink)}
+.art-samples button[aria-pressed="true"]{border-color:var(--accent);color:var(--ink)}
+.art-samples img{display:block;width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover}
+@media (max-width:520px){.art-samples{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:900px){.art-side{position:static}}
 </style>
 
@@ -488,6 +496,8 @@ label.f{font-size:13px;font-weight:500;color:var(--muted)}
           <div style="min-width:0"><div class="nm" id="artName"></div><div class="sz" id="artSize"></div></div>
           <button class="x" id="artRemove" type="button" aria-label="Remove picture">×</button>
         </div>
+        <div class="art-samphead"><span>Or pick one of ours</span><small>tap to try</small></div>
+        <div class="art-samples" id="artSamples" role="group" aria-label="Sample pictures"></div>
       </section>
 
       <section class="step" aria-labelledby="ah3">
@@ -1150,12 +1160,12 @@ let raf=0;
 function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{paint($('artCanvas'),720,900);check();});}
 
 // picture input
-function loadFile(f){
+function loadFile(f,sample){
   if(!f||!/^image\//.test(f.type)){toastMsg('Please choose an image file');return;}
   const url=URL.createObjectURL(f);const im=new Image();
   im.onload=()=>{A.img=im;A.file=f;A.panX=A.panY=0;$('artThumb').src=url;$('artName').textContent=f.name;
     $('artSize').textContent=Math.max(1,Math.round(f.size/1024))+' KB · '+im.naturalWidth+'×'+im.naturalHeight;
-    $('artDrop').hidden=true;$('artFileRow').hidden=false;procKey='';draw();};
+    $('artDrop').hidden=true;$('artFileRow').hidden=false;procKey='';markSample(sample||null);draw();};
   im.onerror=()=>toastMsg('That image could not be opened');im.src=url;
 }
 function toastMsg(m){const t=$('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400);}
@@ -1166,7 +1176,34 @@ drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDe
 ['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
 document.addEventListener('paste',e=>{if(location.hash!=='#art')return;const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith('image/'));if(it)loadFile(it.getAsFile());});
-$('artRemove').onclick=()=>{A.img=null;A.file=null;$('artFile').value='';$('artDrop').hidden=false;$('artFileRow').hidden=true;procKey='';draw();};
+$('artRemove').onclick=()=>{A.img=null;A.file=null;$('artFile').value='';$('artDrop').hidden=false;$('artFileRow').hidden=true;procKey='';markSample(null);draw();};
+
+// built-in sample pictures (drawn as SVG, so no extra files to host)
+const SV=(b)=>`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>${b}</svg>`;
+const LG=(id,a,stops,v=1)=>`<linearGradient id='${id}' x1='0' y1='0' x2='${v?0:1}' y2='${v?1:0}'>${stops.map((c,i)=>`<stop offset='${i/(stops.length-1)}' stop-color='${c}'/>`).join('')}</linearGradient>`;
+const ring=(n,rx,ry,cy,fill,rot=0)=>[...Array(n)].map((_,i)=>`<ellipse rx='${rx}' ry='${ry}' cy='${cy}' transform='rotate(${rot+i*360/n})' fill='${fill}'/>`).join('');
+const stars=(n,seed)=>{let r=seed,o='';const rnd=()=>(r=(r*16807)%2147483647)/2147483647;for(let i=0;i<n;i++)o+=`<circle cx='${(rnd()*512).toFixed(0)}' cy='${(rnd()*300).toFixed(0)}' r='${(1+rnd()*2.4).toFixed(1)}' fill='#fff' opacity='${(.5+rnd()*.5).toFixed(2)}'/>`;return o;};
+const SAMPLES=[
+ {k:'sunset',n:'Sunset',svg:SV(`<defs>${LG('g',0,['#2b1055','#7b2d8e','#d53369','#ff8c42','#ffcf70'])}</defs><rect width='512' height='512' fill='url(#g)'/><circle cx='256' cy='300' r='96' fill='#fff1b8'/><path d='M0 350 L80 270 L160 330 L255 225 L360 340 L440 280 L512 330 V512 H0Z' fill='#4a1d5c'/><path d='M0 420 L110 350 L220 415 L330 355 L512 425 V512 H0Z' fill='#1b0b29'/>`)},
+ {k:'ocean',n:'Ocean',svg:SV(`<defs>${LG('s',0,['#7ec8f2','#d9f2ff'])}${LG('w',0,['#1f8ac9','#0a2d5c'])}</defs><rect width='512' height='512' fill='url(#s)'/><circle cx='380' cy='130' r='54' fill='#fff'/><rect y='250' width='512' height='262' fill='url(#w)'/><path d='M0 280 Q64 250 128 280 T256 280 T384 280 T512 280 V512 H0Z' fill='#2a9bd8'/><path d='M0 350 Q64 315 128 350 T256 350 T384 350 T512 350 V512 H0Z' fill='#156aa8'/><path d='M0 430 Q64 395 128 430 T256 430 T384 430 T512 430 V512 H0Z' fill='#0a3a72'/><path d='M0 280 Q64 250 128 280 T256 280 T384 280 T512 280' fill='none' stroke='#fff' stroke-width='6' opacity='.8'/>`)},
+ {k:'cat',n:'Moon cat',svg:SV(`<defs>${LG('n',0,['#0b1026','#1d2b64','#3a4f8f'])}</defs><rect width='512' height='512' fill='url(#n)'/>${stars(60,7)}<circle cx='256' cy='250' r='150' fill='#fbeec1'/><circle cx='210' cy='200' r='22' fill='#efdca0'/><circle cx='320' cy='300' r='30' fill='#efdca0'/><path d='M0 420 Q256 360 512 430 V512 H0Z' fill='#070a18'/><g fill='#070a18'><ellipse cx='250' cy='350' rx='50' ry='62'/><circle cx='250' cy='272' r='36'/><path d='M220 258 L226 220 L244 246Z M256 246 L274 220 L280 258Z'/></g><path d='M292 400 Q350 400 336 330' fill='none' stroke='#070a18' stroke-width='13' stroke-linecap='round'/>`)},
+ {k:'flower',n:'Flower',svg:SV(`<defs>${LG('f',0,['#ffe9e3','#c6e6fb'])}</defs><rect width='512' height='512' fill='url(#f)'/><g transform='translate(256 256)'>${ring(10,50,120,-105,'#ff4f8b')}${ring(10,34,80,-70,'#ff9ab8',18)}<circle r='58' fill='#ffc53d'/><circle r='34' fill='#e8890c'/></g>`)},
+ {k:'mandala',n:'Rangoli',svg:SV(`<rect width='512' height='512' fill='#2a145e'/><g transform='translate(256 256)'><circle r='240' fill='#3d1f80'/>${ring(16,26,70,-185,'#ff9f1c')}${ring(12,32,72,-125,'#e71d73',15)}${ring(8,30,60,-70,'#2ec4b6',22.5)}<circle r='52' fill='#ffd23f'/><circle r='30' fill='#e71d73'/><circle r='12' fill='#fff'/></g>`)},
+ {k:'hills',n:'Mountains',svg:SV(`<defs>${LG('m',0,['#6fd6ff','#d8f5ff'])}</defs><rect width='512' height='512' fill='url(#m)'/><circle cx='120' cy='120' r='46' fill='#fff8d6'/><path d='M-20 380 L150 150 L320 380Z' fill='#3d6b8c'/><path d='M150 150 L190 205 L170 200 L150 220 L128 198 L110 205Z' fill='#fff'/><path d='M160 400 L360 120 L560 400Z' fill='#27506e'/><path d='M360 120 L405 183 L380 176 L360 198 L335 176 L312 186Z' fill='#fff'/><path d='M0 400 Q130 350 260 400 T512 390 V512 H0Z' fill='#2f8f5b'/><path d='M0 450 Q160 410 300 455 T512 445 V512 H0Z' fill='#1c5e3a'/>`)},
+ {k:'heart',n:'Heart',svg:SV(`<defs>${LG('h',0,['#ffd1dc','#ff8fab'])}${LG('r',0,['#ff3d6e','#a1003c'])}</defs><rect width='512' height='512' fill='url(#h)'/><path transform='translate(76 86) scale(360)' d='M.5 .97C.2 .76 0 .56 0 .31 0 .12 .14 .02 .29 .02 .39 .02 .46 .07 .5 .16 .54 .07 .61 .02 .71 .02 .86 .02 1 .12 1 .31 1 .56 .8 .76 .5 .97Z' fill='url(#r)'/><ellipse cx='180' cy='170' rx='34' ry='20' transform='rotate(-35 180 170)' fill='#fff' opacity='.55'/>`)},
+ {k:'coffee',n:'Coffee',svg:SV(`<rect width='512' height='512' fill='#f4e3c8'/><circle cx='256' cy='256' r='210' fill='#e9cfa6'/><ellipse cx='240' cy='400' rx='170' ry='34' fill='#fff'/><ellipse cx='240' cy='396' rx='120' ry='20' fill='#e6d6c0'/><circle cx='352' cy='305' r='44' fill='none' stroke='#7a3e1d' stroke-width='22'/><path d='M130 230 H350 V320 Q350 395 240 395 Q130 395 130 320Z' fill='#9a4f24'/><ellipse cx='240' cy='230' rx='110' ry='24' fill='#4a230e'/><path d='M200 190 Q180 160 205 135 T200 80 M250 190 Q230 160 255 135 T250 80 M300 190 Q280 160 305 135 T300 80' fill='none' stroke='#fff' stroke-width='10' stroke-linecap='round' opacity='.9'/>`)},
+];
+const svgURL=svg=>'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+$('artSamples').innerHTML=SAMPLES.map(s=>`<button type="button" data-k="${s.k}" aria-pressed="false" title="Use ${s.n}"><img src="${svgURL(s.svg)}" alt="" loading="lazy">${s.n}</button>`).join('');
+function markSample(k){A.sample=k;$('artSamples').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===k)));}
+function useSample(k){
+  const s=SAMPLES.find(x=>x.k===k);if(!s)return;
+  const im=new Image();
+  im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=1024;c.getContext('2d').drawImage(im,0,0,1024,1024);
+    c.toBlob(b=>{if(b)loadFile(new File([b],s.n.toLowerCase().replace(/\s+/g,'-')+'.png',{type:'image/png'}),k);},'image/png');};
+  im.src=svgURL(s.svg);
+}
+$('artSamples').addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b)useSample(b.dataset.k);});
 
 // drag to move picture
 const stage=$('artStage');let drag=null;
@@ -1193,7 +1230,7 @@ $('artDl').onclick=()=>{
   },30);
 };
 
-function start(){ if(build()) draw(); else { $('artCheck').innerHTML='<span class="ic">!</span><div><b>QR library did not load</b><small>Check your internet and reload</small></div>'; } }
+function start(){ if(build()){ draw(); if(!A.img) useSample('sunset'); } else { $('artCheck').innerHTML='<span class="ic">!</span><div><b>QR library did not load</b><small>Check your internet and reload</small></div>'; } }
 if(document.readyState==='complete') start(); else window.addEventListener('load',start);
 window.addEventListener('hashchange',()=>{if(location.hash==='#art')draw();});
 })();
